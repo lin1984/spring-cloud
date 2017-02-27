@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:cloud="http://www.springframework.org/schema/cloud"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/cloud http://www.springframework.org/schema/cloud/spring-cloud.xsd">
+
+	<cloud:data-source id="no-config" service-name="my-service"/>
+
+	<cloud:data-source id="pool-and-connection-config" service-name="my-service">
+		<cloud:connection properties="sessionVariables=sql_mode='ANSI';characterEncoding=UTF-8"/>
+		<cloud:pool pool-size="20" max-wait-time="200"/>
+		<cloud:pool-data-sources>
+			<value>BasicDbcp</value>
+		</cloud:pool-data-sources>
+	</cloud:data-source>
+
+	<cloud:data-source id="pool-config" service-name="my-service">
+		<cloud:pool pool-size="5-30" max-wait-time="3000"/>
+		<cloud:pool-data-sources>
+			<value>BasicDbcp</value>
+		</cloud:pool-data-sources>
+	</cloud:data-source>
+
+	<cloud:data-source id="properties-config" service-name="my-service">
+		<cloud:pool-data-sources>
+			<value>BasicDbcp</value>
+		</cloud:pool-data-sources>
+		<cloud:connection-properties>
+			<entry key="driverClassName" value="test.driver"/>
+			<entry key="validationQuery" value="test validation query"/>
+			<entry key="testOnBorrow" value="false"/>
+		</cloud:connection-properties>
+	</cloud:data-source>
+
+	<cloud:data-source id="db-pool-tomcat-jdbc" service-name="my-service">
+		<cloud:pool-data-sources>
+			<value>TomcatJdbc</value>
+			<value>TomcatDbcp</value>
+			<value>BasicDbcp</value>
+		</cloud:pool-data-sources>
+	</cloud:data-source>
+
+	<cloud:data-source id="db-pool-hikari" service-name="my-service">
+		<cloud:pool-data-sources>
+			<value>HikariCp</value>
+		</cloud:pool-data-sources>
+	</cloud:data-source>
+
+	<cloud:data-source id="db-pool-invalid" service-name="my-service">
+		<cloud:pool-data-sources>
+			<value>Dummy</value>
+		</cloud:pool-data-sources>
+	</cloud:data-source>
+
+</beans>
